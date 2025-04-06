@@ -6,8 +6,7 @@
   - [Available Skyrim Packages](#available-skyrim-packages)
   - [CommonLib](#commonlib)
     - [Basic Usage](#basic-usage)
-      - [`skyrim-commonlib`](#skyrim-commonlib)
-      - [`skyrim-commonlib-vr` (_or any other package_)](#skyrim-commonlib-vr-or-any-other-package)
+      - [`skyrim-commonlib-ae` (_or any other package_)](#skyrim-commonlib-ae-or-any-other-package)
     - [SKSE Plugin metadata](#skse-plugin-metadata)
     - [Xbyak Support](#xbyak-support)
     - [Mod Folder Deployment](#mod-folder-deployment)
@@ -29,52 +28,36 @@ add_repositories("SkyrimScripting https://github.com/SkyrimScripting/Packages.gi
 
 ## Available Skyrim Packages
 
-- `skyrim-commonlib`
-- `skyrim-commonlib-vr`
-- `skyrim-commonlib-ng`
 - `skyrim-commonlib-ae`
 - `skyrim-commonlib-se`
-- _Other packages in this repo are a work in progress and I wouldn't use them yet!_
+- `skyrim-commonlib-vr`
+- `skyrim-commonlib-ng`
 
 ## CommonLib
 
 `xmake` packages available:
 
-- `skyrim-commonlib` ( _Alias for `skyrim-commonlib-ng`_ )
-- `skyrim-commonlib-vr` ( _Adds dependency on @alandtse's [CommonLibVR](https://github.com/alandtse/CommonLibVR)_ )
-- `skyrim-commonlib-ng` ( _Adds dependency on @CharmedBaryon's [CommonLibSSE-NG](https://github.com/CharmedBaryon/CommonLibSSE-NG)_ )
 - `skyrim-commonlib-ae` ( _Adds dependency on @powerof3's [CommonLibSSE](https://github.com/powerof3/CommonLibSSE)_ configured for Skyrim 1.6+ compatibility )
 - `skyrim-commonlib-se` ( _Adds dependency on @powerof3's [CommonLibSSE](https://github.com/powerof3/CommonLibSSE)_ configured for Skyrim 1.5.97 compatibility )
+- `skyrim-commonlib-vr` ( _Adds dependency on @alandtse's [CommonLibVR](https://github.com/alandtse/CommonLibVR)_ )
+- `skyrim-commonlib-ng` ( _Adds dependency on @CharmedBaryon's [CommonLibSSE-NG](https://github.com/CharmedBaryon/CommonLibSSE-NG)_ )
 
 ### Basic Usage
 
-#### `skyrim-commonlib`
-
-To use one of these CommonLib packages:
-
-```lua
-add_requires("skyrim-commonlib")
-
-target("My-SKSE-Plugin")
-    add_files("plugin.cpp")
-    add_packages("skyrim-commonlib")
-    add_rules("@skyrim-commonlib/plugin")
-```
-
-#### `skyrim-commonlib-vr` (_or any other package_)
+#### `skyrim-commonlib-ae` (_or any other package_)
 
 Or any of the other packages listed above:
 
 ```lua
 -- For example, to use the VR version of CommonLib:
-add_requires("skyrim-commonlib-vr")
+add_requires("skyrim-commonlib-ae")
 
 target("My-SKSE-Plugin")
     add_files("plugin.cpp")
-    -- This will add the CommonLibVR dependency
-    add_packages("skyrim-commonlib-vr")
+    -- This will add the CommonLibSSE dependency
+    add_packages("skyrim-commonlib-ae")
     -- And don't forget to add the rules for the plugin
-    add_rules("@skyrim-commonlib-vr/plugin")
+    add_rules("@skyrim-commonlib-ae/plugin")
 ```
 
 ### SKSE Plugin metadata
@@ -82,8 +65,8 @@ target("My-SKSE-Plugin")
 ```lua
 target("My-SKSE-Plugin")
     add_files("plugin.cpp")
-    add_packages("skyrim-commonlib")
-    add_rules("@skyrim-commonlib/plugin", {
+    add_packages("skyrim-commonlib-ae")
+    add_rules("@skyrim-commonlib-ae/plugin", {
         name = "My-SKSE-Plugin", -- This defaults to the target name
         version = "420.1.69", -- This defaults to the target version or "0.0.0"
         author = "Mrowr Purr",
@@ -98,7 +81,7 @@ target("My-SKSE-Plugin")
 To enable [xbyak](https://github.com/herumi/xbyak) support, enable the `xybak` option (available for any version):
 
 ```lua
-add_requires("skyrim-commonlib", { configs = { xbyak = true } })
+add_requires("skyrim-commonlib-ae", { configs = { xbyak = true } })
 ```
 
 This will provide the following function (_which is otherwise unavailable_):
@@ -114,20 +97,19 @@ SKSE::Trampoline::allocate(Xbyak::CodeGenerator& codeGenerator)
 Optionally, you can define one or more "mods" folders to deploy the plugin dll/pdb to:
 
 ```lua
-add_requires("skyrim-commonlib")
+add_requires("skyrim-commonlib-ae")
 
 target("My-SKSE-Plugin")
     add_files("plugin.cpp")
-    add_packages("skyrim-commonlib")
+    add_packages("skyrim-commonlib-ae")
 
-    add_rules("@skyrim-commonlib/plugin", {
+    add_rules("@skyrim-commonlib-ae/plugin", {
         -- This will output to the following generated folder location:
         --  C:/Path/to/my/mods/My-SKSE-Plugin/SKSE/Plugins/My-SKSE-Plugin.dll
         mods_folder = "C:/Path/to/my/mods"
     })
 
     -- Note: use the rule with a name matching the package that you are using:
-    -- add_rules("@skyrim-commonlib/plugin", {...
     -- add_rules("@skyrim-commonlib-vr/plugin", {...
     -- add_rules("@skyrim-commonlib-ae/plugin", {...
     -- add_rules("@skyrim-commonlib-se/plugin", {...
@@ -137,12 +119,12 @@ target("My-SKSE-Plugin")
 If you have multiple mods folders, you can specify them as a list:
 
 ```lua
-add_requires("skyrim-commonlib")
+add_requires("skyrim-commonlib-ae")
 
 target("My-SKSE-Plugin")
     add_files("plugin.cpp")
-    add_packages("skyrim-commonlib")
-    add_rules("@skyrim-commonlib/plugin", {
+    add_packages("skyrim-commonlib-ae")
+    add_rules("@skyrim-commonlib-ae/plugin", {
         mod_folders = { "C:/...", "C:/..." }
     })
 ```
@@ -150,12 +132,12 @@ target("My-SKSE-Plugin")
 Paths containing a `;` are split, allowing for use of an environment varialbe to specify multiple output paths:
 
 ```lua
-add_requires("skyrim-commonlib")
+add_requires("skyrim-commonlib-ae")
 
 target("My-SKSE-Plugin")
     add_files("plugin.cpp")
-    add_packages("skyrim-commonlib")
-    add_rules("@skyrim-commonlib/plugin", {
+    add_packages("skyrim-commonlib-ae")
+    add_rules("@skyrim-commonlib-ae/plugin", {
         mod_folders = os.getenv("SKYRIM_MOD_FOLDERS")
     })
 ```
@@ -165,20 +147,20 @@ target("My-SKSE-Plugin")
 You can also specify additional files to deploy to the mod folder:
 
 ```lua
-add_requires("skyrim-commonlib")
+add_requires("skyrim-commonlib-ae")
 
 target("My-SKSE-Plugin")
     add_files("plugin.cpp")
-    add_packages("skyrim-commonlib")
-    add_rules("@skyrim-commonlib/plugin", {
+    add_packages("skyrim-commonlib-ae")
+    add_rules("@skyrim-commonlib-ae/plugin", {
         mod_files = { "Scripts", "", "AnythingToDeployToTheModFolder" }
     })
 ```
 
-> _xmake configuration based on official CommonLibSSE-NG xmake package configuration:_
+> _These xmake configurations were originally based on these CommonLibSSE-NG xmake package configuration:_
 > _https://github.com/xmake-io/xmake-repo_
 > _License: Apache 2.0_
 >
-> _Configuration above was authored by by Qudix (https://github.com/Qudix)_
+> _That xmake configuration was authored by by Qudix (https://github.com/Qudix)_
 >
 > _Modifications were made to the original code_
